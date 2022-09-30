@@ -105,9 +105,16 @@ window.addEventListener("load", function () {
       this.input = new InputHandler(this);
       this.keys = [];
       this.ammo = 20;
+      this.maxAmmo = 50;
+      this.ammoTimer = 0;
+      this.ammoInterval = 500;
     }
     update() {
       this.player.update();
+      if (this.ammoTimer > this.ammoInterval) {
+        if (this.ammo < this.maxAmmo) this.ammo++;
+        this.ammoTimer = 0;
+      }
     }
     draw(context) {
       this.player.draw(context);
@@ -115,12 +122,15 @@ window.addEventListener("load", function () {
   }
 
   const game = new Game(canvas.width, canvas.height);
+  let lastTime = 0;
   // animation lopp
-  function animate() {
+  function animate(timeStamp) {
+    const deltaTime = timeStamp - lastTime;
+    lastTime = timeStamp;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    game.update();
+    game.update(deltaTime);
     game.draw(ctx);
     requestAnimationFrame(animate);
   }
-  animate();
+  animate(0);
 });
