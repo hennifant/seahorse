@@ -150,7 +150,7 @@ window.addEventListener("load", function () {
       this.layer2 = new Layer(this.game, this.image2, 0.4);
       this.layer3 = new Layer(this.game, this.image3, 1);
       this.layer4 = new Layer(this.game, this.image4, 1.4);
-      this.layers = [this.layer1, this.layer2, this.layer3, this.layer4];
+      this.layers = [this.layer1, this.layer2, this.layer3];
     }
     update() {
       this.layers.forEach((layer) => layer.update());
@@ -239,6 +239,7 @@ window.addEventListener("load", function () {
       if (!this.gameOver) this.gameTime += deltaTime;
       if (this.gameTime > this.timeLimit) this.gameOver = true;
       this.background.update();
+      this.background.layer4.update();
       this.player.update();
       if (this.ammoTimer > this.ammoInterval) {
         if (this.ammo < this.maxAmmo) this.ammo++;
@@ -278,6 +279,7 @@ window.addEventListener("load", function () {
       this.enemies.forEach((enemy) => {
         enemy.draw(context);
       });
+      this.background.layer4.draw(context);
     }
     addEnemy() {
       this.enemies.push(new Angler(this));
