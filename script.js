@@ -16,6 +16,8 @@ window.addEventListener("load", function () {
           this.game.keys.push(e.key);
         } else if (e.key === " ") {
           this.game.player.shootTop();
+        } else if (e.key === "d") {
+          this.game.debug = !this.game.debug;
         }
       });
       window.addEventListener("keyup", (e) => {
@@ -56,7 +58,7 @@ window.addEventListener("load", function () {
       this.x = 20;
       this.y = 100;
       this.frameX = 0;
-      this.frameY = 1;
+      this.frameY = 0;
       this.maxFrame = 37;
       this.speedY = 0;
       this.maxSpeed = 3;
@@ -84,8 +86,8 @@ window.addEventListener("load", function () {
       }
     }
     draw(context) {
-      context.fillStyle = "black";
-      context.fillRect(this.x, this.y, this.width, this.height);
+      if (this.game.debug)
+        context.strokeRect(this.x, this.y, this.width, this.height);
       context.drawImage(
         this.image,
         this.frameX * this.width,
@@ -255,6 +257,7 @@ window.addEventListener("load", function () {
       this.gameTime = 0;
       this.timeLimit = 5000;
       this.speed = 1;
+      this.debug = true;
     }
     update(deltaTime) {
       if (!this.gameOver) this.gameTime += deltaTime;
