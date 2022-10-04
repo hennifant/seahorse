@@ -118,8 +118,7 @@ window.addEventListener("load", function () {
       this.x = this.game.width;
       this.speedX = Math.random() * -1.5 - 0.5;
       this.markedForDeletion = false;
-      this.lives = 5;
-      this.score = this.lives;
+
       this.frameX = 0;
       this.frameY = 0;
       thix.maxFrame = 37;
@@ -150,7 +149,7 @@ window.addEventListener("load", function () {
       context.fillText(this.lives, this.x, this.y);
     }
   }
-  class Angler extends Enemy {
+  class Angler1 extends Enemy {
     constructor(game) {
       super(game);
       this.width = 228;
@@ -158,6 +157,21 @@ window.addEventListener("load", function () {
       this.y = Math.random() * (this.game.height * 0.9 - this.height);
       this.image = document.getElementById("angler1");
       this.frameY = Math.floor(Math.random() * 3);
+      this.lives = 2;
+      this.score = this.lives;
+    }
+  }
+
+  class Angler2 extends Enemy {
+    constructor(game) {
+      super(game);
+      this.width = 213;
+      this.height = 165;
+      this.y = Math.random() * (this.game.height * 0.9 - this.height);
+      this.image = document.getElementById("angler2");
+      this.frameY = Math.floor(Math.random() * 2);
+      this.lives = 2;
+      this.score = this.lives;
     }
   }
 
@@ -274,7 +288,7 @@ window.addEventListener("load", function () {
       this.score = 0;
       this.winningScore = 10;
       this.gameTime = 0;
-      this.timeLimit = 5000;
+      this.timeLimit = 15000;
       this.speed = 1;
       this.debug = true;
     }
@@ -325,7 +339,10 @@ window.addEventListener("load", function () {
       this.background.layer4.draw(context);
     }
     addEnemy() {
-      this.enemies.push(new Angler(this));
+      const randomize = Math.random();
+      if (randomize < 0.5) this.enemies.push(new Angler1(this));
+      else this.enemies.push(new Angler2(this));
+      console.log(this.enemies);
     }
     checkCollision(rect1, rect2) {
       return (
