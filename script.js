@@ -96,6 +96,7 @@ window.addEventListener("load", function () {
         } else {
           this.powerUpTimer += deltaTime;
           this.frameY = 1;
+          this.game.ammo += 0.1;
         }
       }
     }
@@ -124,6 +125,20 @@ window.addEventListener("load", function () {
         );
         this.game.ammo--;
       }
+      if (this.powerUp) this.shootBottom();
+    }
+    shootBottom() {
+      if (this.game.ammo > 0) {
+        this.projectiles.push(
+          new Projectile(this.game, this.x + 80, this.y + 175)
+        );
+        this.game.ammo--;
+      }
+    }
+    enterPowerUp() {
+      this.powerUpTimer = 0;
+      this.powerUp = true;
+      this.game.ammo = this.game.maxAmmo;
     }
   }
   class Enemy {
@@ -335,6 +350,8 @@ window.addEventListener("load", function () {
         enemy.update();
         if (this.checkCollision(this.player, enemy)) {
           enemy.markedForDeletion = true;
+          if ((enemy.type = "lucky")) this.player.enterPowerUp();
+          else this.score--;
         }
         this.player.projectiles.forEach((projectile) => {
           if (this.checkCollision(projectile, enemy)) {
