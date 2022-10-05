@@ -103,6 +103,9 @@ window.addEventListener("load", function () {
     draw(context) {
       if (this.game.debug)
         context.strokeRect(this.x, this.y, this.width, this.height);
+      this.projectiles.forEach((projectiles) => {
+        projectiles.draw(context);
+      });
       context.drawImage(
         this.image,
         this.frameX * this.width,
@@ -114,9 +117,6 @@ window.addEventListener("load", function () {
         this.width,
         this.height
       );
-      this.projectiles.forEach((projectiles) => {
-        projectiles.draw(context);
-      });
     }
     shootTop() {
       if (this.game.ammo > 0) {
@@ -274,14 +274,11 @@ window.addEventListener("load", function () {
       context.font = this.fontSize + "px " + this.fontFamily;
       // score
       context.fillText("Score:" + this.game.score, 20, 40);
-      // ammo
-      for (let i = 0; i < this.game.ammo; i++) {
-        context.fillRect(20 + 5 * i, 50, 3, 20);
-      }
+
       // timer
       const formattedTime = (this.game.gameTime * 0.001).toFixed(1);
       context.fillText("Time: " + formattedTime, 20, 100);
-      // game overmessages
+      // game over messages
       if (this.game.gameOver) {
         context.textAlign = "center";
         let message1;
@@ -305,6 +302,11 @@ window.addEventListener("load", function () {
           this.game.width * 0.5,
           this.game.height * 0.5 + 40
         );
+      }
+      // ammo
+      if (this.game.player.powerUp) context.fillStyle = "#ffffbd";
+      for (let i = 0; i < this.game.ammo; i++) {
+        context.fillRect(20 + 5 * i, 50, 3, 20);
       }
       context.restore();
     }
