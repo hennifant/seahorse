@@ -118,10 +118,9 @@ window.addEventListener("load", function () {
       this.x = this.game.width;
       this.speedX = Math.random() * -1.5 - 0.5;
       this.markedForDeletion = false;
-
       this.frameX = 0;
       this.frameY = 0;
-      thix.maxFrame = 37;
+      this.maxFrame = 37;
     }
     update() {
       this.x += this.speedX - this.game.speed;
