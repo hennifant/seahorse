@@ -56,6 +56,7 @@ window.addEventListener("load", function () {
       this.image = document.getElementById("gears");
       this.frameX = Math.floor(Math.random() * 3);
       this.frameY = Math.floor(Math.random() * 3);
+      this.spriteSize = 50;
       this.sizeModifier = (Math.random() * 0.5 + 0.5).toFixed(1);
       this.size = this.spriteSize * this.sizeModifier;
       this.speedX = Math.random() * 6 - 3;
@@ -145,8 +146,8 @@ window.addEventListener("load", function () {
     draw(context) {
       if (this.game.debug)
         context.strokeRect(this.x, this.y, this.width, this.height);
-      this.projectiles.forEach((projectiles) => {
-        projectiles.draw(context);
+      this.projectiles.forEach((projectile) => {
+        projectile.draw(context);
       });
       context.drawImage(
         this.image,
