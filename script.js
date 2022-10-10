@@ -65,6 +65,8 @@ window.addEventListener("load", function () {
       this.markedForDeletion = false;
       this.angle = 0;
       this.va = Math.random() * 0.2 - 0.1;
+      this.bounced = false;
+      this.bottomBounceBoundary = 100;
     }
     update() {
       this.angle += this.va;
@@ -73,6 +75,13 @@ window.addEventListener("load", function () {
       this.y += this.speedY;
       if (this.y > this.game.height + this.size || this.x < 0 - this.size)
         this.markedForDeletion = true;
+      if (
+        this.y > this.game.height - this.bottomBounceBoundary &&
+        !this.bounced
+      ) {
+        this.bounced = true;
+        this.speedY *= -0.5;
+      }
     }
     draw() {
       context.drawImage(
@@ -367,7 +376,7 @@ window.addEventListener("load", function () {
       this.ui = new UI(this);
       this.keys = [];
       this.enemies = [];
-      this.particle = [];
+      this.particles = [];
       this.enemyTimer = 0;
       this.enemyInterval = 1000;
       this.ammo = 20;
@@ -402,7 +411,7 @@ window.addEventListener("load", function () {
         enemy.update();
         if (this.checkCollision(this.player, enemy)) {
           enemy.markedForDeletion = true;
-          for (let i = 0; i > 10; i++) {
+          for (let i = 0; i < 10; i++) {
             this.particles.push(
               new Particle(
                 this,
@@ -418,17 +427,15 @@ window.addEventListener("load", function () {
           if (this.checkCollision(projectile, enemy)) {
             enemy.lives--;
             projectile.markedForDeletion = true;
-
+            this.particles.push(
+              new Particle(
+                this,
+                enemy.x + enemy.width * 0.5,
+                enemy.y + enemy.height * 0.5
+              )
+            );
             if (enemy.lives <= 0) {
               enemy.markedForDeletion = true;
-              this.particles.push(
-                new Particle(
-                  this,
-                  enemy.x + enemy.width * 0.5,
-                  enemy.y + enemy.height * 0.5
-                )
-              );
-
               if (!this.gameOver) this.score += enemy.score;
               if (this.score > this.winningScore) this.gameOver = true;
             }
