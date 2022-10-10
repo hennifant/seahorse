@@ -83,7 +83,7 @@ window.addEventListener("load", function () {
         this.speedY *= -0.9;
       }
     }
-    draw() {
+    draw(context) {
       context.drawImage(
         this.image,
         this.frameX * this.spriteSize,
