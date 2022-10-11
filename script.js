@@ -352,17 +352,34 @@ window.addEventListener("load", function () {
       this.game = game;
       this.frameX = 0;
       this.spriteHeight = 200;
-      this.fps = 15;
+      this.fps = 30;
       this.timer = 0;
       this.interval = 1000 / this.fps;
       this.markedForDeletion = false;
       this.maxFrame = 8;
     }
     update(deltaTime) {
-      this.frameX++;
+      this.x -= this.game.speed;
+      if (this.timer > this.interval) {
+        this.frameX++;
+        this.timer = 0;
+      } else {
+        this.timer += deltaTime;
+      }
+      if (this.frameX > this.maxFrame) this.markedForDeletion = true;
     }
     draw(context) {
-      context.drawImage(this.image, this.x, this.y, this.width, this.height);
+      context.drawImage(
+        this.image,
+        this.frameX * this.spriteWidth,
+        0,
+        this.spriteWidth,
+        this.spriteHeight,
+        this.x,
+        this.y,
+        this.width,
+        this.height
+      );
     }
   }
 
@@ -475,7 +492,7 @@ window.addEventListener("load", function () {
       this.particles = this.particles.filter(
         (particle) => !particle.markedForDeletion
       );
-      this.explosions.forEach((explosion) => explosion.update());
+      this.explosions.forEach((explosion) => explosion.update(deltaTime));
       this.explosions = this.explosions.filter(
         (explosion) => !explosion.markedForDeletion
       );
@@ -567,7 +584,13 @@ window.addEventListener("load", function () {
     addExplosion(enemy) {
       const randomize = Math.random();
       if (randomize < 1)
-        this.explosions.push(new SmokeExplosion(this, enemy.x, enemy.y));
+        this.explosions.push(
+          new SmokeExplosion(
+            this,
+            enemy.x + enemy.width * 0.5,
+            enemy.y + enemy.height * 0.5
+          )
+        );
     }
     checkCollision(rect1, rect2) {
       return (
@@ -581,13 +604,13 @@ window.addEventListener("load", function () {
 
   const game = new Game(canvas.width, canvas.height);
   let lastTime = 0;
-  // animation lopp
+  // animation loop
   function animate(timeStamp) {
     const deltaTime = timeStamp - lastTime;
     lastTime = timeStamp;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    game.update(deltaTime);
     game.draw(ctx);
+    game.update(deltaTime);
     requestAnimationFrame(animate);
   }
   animate(0);
